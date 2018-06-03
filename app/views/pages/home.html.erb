@@ -4,8 +4,10 @@
         <title>Welcome home page</title>
     </head>
     <body>
-        <h1>Welcome to our app! Home page</h1>
-        <%= image_tag 'spl3.jpg' %>
-       <%= link_to 'Alpha Blog', articles_path %> | <%= link_to 'About', about_path %>
+        <div class="center jumbotron">
+        <h1> Alpha Blog </h1>
+        <%= link_to 'Sign up now', "#", class: "btn btn-danger btn-lg btn-xlarge" %>
+       </div><br/>
+       <p><br/><%= image_tag 'spl3.jpg' %></p>
         </body>
     </html>
