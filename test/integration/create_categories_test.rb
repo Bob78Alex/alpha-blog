@@ -2,40 +2,53 @@ require 'test_helper'
 
 class CreateCategoriesTest < ActionDispatch::IntegrationTest
 
- test "get new category form and create category" do
+def setup
 
-  get new_category_path
+@user = User.create(username: "john", email: "john@example.com", password: "password", admin: true)
 
-  assert_template 'categories/new'
+end
 
-  assert_difference 'Category.count', 1 do
+test "get new category form and create category" do
 
-  post_via_redirect categories_path, category: {name: "sports"}
-  end
+sign_in_as(@user, "password")
 
-  assert_template 'categories/index'
+get new_category_path
 
-  assert_match "sports", response.body
+assert_template 'categories/new'
 
-  end
-  
-  test "invalid category submission results in failure" do
+assert_difference 'Category.count', 1 do
 
-    get new_category_path
+post_via_redirect categories_path, category: {name: "sports"}
 
-    assert_template 'categories/new'
+# Note the line above was different for Rails 5
 
-    assert_no_difference 'Category.count' do
+end
 
-    post categories_path, category: {name: " "}
-    
-    end
+assert_template 'categories/index'
 
-    assert_template 'categories/new'
+assert_match "sports", response.body
 
-    assert_select 'h2.panel-title'
+end
 
-    assert_select 'div.panel-body'
+test "invalid category submission results in failure" do
+
+sign_in_as(@user, "password")
+
+get new_category_path
+
+assert_template 'categories/new'
+
+assert_no_difference 'Category.count' do
+
+post categories_path, category: {name: " "}
+
+end
+
+assert_template 'categories/new'
+
+assert_select 'h2.panel-title'
+
+assert_select 'div.panel-body'
 
 end
 
